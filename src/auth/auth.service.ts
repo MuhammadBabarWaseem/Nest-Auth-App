@@ -29,7 +29,19 @@ export class AuthService {
         return { message: 'Signup Successful' };
     }
 
-    async signin() {
+    async signin(dto: AuthDto) {
+        const { email, password } = dto;
+        const foundUser = await this.prisma.user.findUnique({ where: { email } });
+
+        if (!foundUser) {
+            throw new BadRequestException('Wrong Credentials');
+        }
+
+        const isMatch = await this.comparePassword({ password, hash: foundUser.hashedPassword });
+        if (!isMatch) {
+            throw new BadRequestException('Wrong Credentials');
+        }
+
         return { message: 'Signin Successful' };
     }
 
@@ -40,8 +52,12 @@ export class AuthService {
     async hashPassword(pasword: string) {
         const saltOrRounds = 10;
         const password = 'random_password';
-        const hashedPassword = await bcrypt.hash(password, saltOrRounds);
+        return await bcrypt.hash(password, saltOrRounds);
+    }
 
-        return hashedPassword;
+    async comparePassword(args: { password: string, hash: string }) {
+
+        return await bcrypt.compare(args.password, args.hash);
+
     }
 }
