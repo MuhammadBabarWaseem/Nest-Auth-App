@@ -1,6 +1,6 @@
-import { PrismaService } from './../../prisma/prisma.service';
 /* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable prettier/prettier */
+import { PrismaService } from './../../prisma/prisma.service';
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { AuthDto } from './dto/auth.dto';
 import * as bcrypt from 'bcrypt';
