@@ -2,11 +2,12 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable prettier/prettier */
 import { PrismaService } from './../../prisma/prisma.service';
-import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
+import { Injectable, BadRequestException, NotFoundException, ForbiddenException } from '@nestjs/common';
 import { AuthDto } from './dto/auth.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { jwtSecret } from 'src/utils/constant';
+import { Request, Response } from 'express';
 
 @Injectable()
 export class AuthService {
@@ -32,7 +33,7 @@ export class AuthService {
         return { message: 'Signup Successful' };
     }
 
-    async signin(dto: AuthDto) {
+    async signin(dto: AuthDto, req: Request, res: Response) {
         const { email, password } = dto;
 
         const foundUser = await this.prisma.user.findUnique({ where: { email } });
@@ -55,7 +56,13 @@ export class AuthService {
             email: foundUser.email,
         });
 
-        return { token };
+        if(!token) {
+            throw new ForbiddenException()
+        }
+
+        res.cookie('token', token);
+
+        return res.send({message: 'Logged In Successfully'});
     }
 
 
