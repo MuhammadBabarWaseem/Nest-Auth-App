@@ -6,7 +6,7 @@ import { AuthDto } from './dto/auth.dto';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
   @Post('signup')
   signup(@Body() dto: AuthDto) {
@@ -19,7 +19,7 @@ export class AuthController {
   }
 
   @Get('signout')
-  signout() {
-    return this.authService.signout()
+  signout(@Req() req, @Res() res) {
+    return this.authService.signout(req, res)
   }
 }
