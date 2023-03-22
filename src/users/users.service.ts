@@ -8,7 +8,7 @@ export class UsersService {
     constructor(private prisma: PrismaService) { }
 
     async getMyUser(id: string) { 
-        // return await this.prisma.user.findUnique();
+        return this.prisma.user.findUnique({where: {id}})
     }
 
     async getUsers() {
@@ -16,4 +16,6 @@ export class UsersService {
             select: { id: true, email: true },
         });
     }
+
+
 }

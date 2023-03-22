@@ -19,10 +19,15 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         })
     }
 
-    private static extractJwt(req: Request): string | null { 
-        if(req.cookies && 'token' in req.cookies) {
+    private static extractJwt(req: Request): string | null {
+        if (req.cookies && 'token' in req.cookies) {
             return req.cookies.token
+        }
+        return null;
     }
-return null;
+
+    async validate(payload: { id: string, email: string }) { 
+        return payload;
     }
+
 }
