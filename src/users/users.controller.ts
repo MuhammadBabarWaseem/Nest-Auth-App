@@ -1,7 +1,7 @@
 import { JwtAuthGuard } from './../auth/jwt.guard';
 /* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable prettier/prettier */
-import { Controller, Get, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, UseGuards, Delete } from '@nestjs/common';
 import { UsersService } from './users.service';
 
 @Controller('users')
@@ -18,5 +18,10 @@ export class UsersController {
   getUsers() { 
     return this.usersService.getUsers();
   } 
+
+  @Delete(':id')
+  deleteUser(@Param() params: { id: string }){
+    return this.usersService.deleteUser(params.id)
+  }
 
 }
